@@ -58,35 +58,40 @@ VALUES
     ('Company JJ', 'Manufacturing', 370.0, 3100, 1, 20, 12, 7.6),
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
+#select all companies
     SELECT *
 FROM fortune_companies;
 
+#select revenue results from companies
 SELECT industry, company_name, revenue,
 CASE WHEN revenue>=500 THEN "high"
 WHEN revenue>=300 THEN "average"
 WHEN revenue>=200 THEN "low"
 ELSE "below $200"
 END AS revenue_results
-FROM fortune_companies
-GROUP BY industry;
+FROM fortune_companies;
 
+#select avg_employee_tenure over 5 years with healthcare benefits
 SELECT company_name, healthcare_benefits, avg_employee_tenure
 FROM fortune_companies
 Group by industry
 HAVING healthcare_benefits
 AND avg_employee_tenure>=5;
 
+#select avg_employee_tenure over 5 years without healthcare benefits
 SELECT company_name, industry, healthcare_benefits, avg_employee_tenure
 FROM fortune_companies
 Group by industry
 HAVING healthcare_benefits=0
 AND avg_employee_tenure>=5;
 
+#select revenue of technology companies
 SELECT company_name, revenue
 FROM fortune_companies
 WHERE industry="Technology"
 GROUP BY revenue;
 
+#select which company in Energy offers healthcare benefits
 SELECT company_name, employees, healthcare_benefits,
 CASE WHEN healthcare_benefits=1 THEN "yes"
 ELSE "no" 
@@ -94,12 +99,19 @@ END AS benefits
 FROM fortune_companies
 WHERE industry="Energy";
 
+#select which industry offers healthcare benefits and paid time off days
 SELECT industry, company_name, healthcare_benefits, paid_time_off_days
 FROM fortune_companies
 Group by industry
 HAVING healthcare_benefits
 AND paid_time_off_days;
 
+#Select which company offers healthcare benefits
 SELECT company_name, healthcare_benefits
 FROM fortune_companies
 WHERE healthcare_benefits=1;
+
+#Find the sum revenue for each company
+SELECT SUM(revenue), company_name
+FROM fortune_companies
+GROUP BY company_name;
