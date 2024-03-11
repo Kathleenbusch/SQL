@@ -1,3 +1,4 @@
+
 SELECT distinct Product,price
 FROM BIT_DB.JanSales
 WHERE price in (SELECT min(price)FROM BIT_DB.JanSales);
