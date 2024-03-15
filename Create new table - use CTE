@@ -93,3 +93,25 @@ rating,
 FROM safety_average_cte
 WHERE rating >=4;
 -- The Code above this line is a SQL query that selects from the CTE --
+
+-- list of all bike lanes, both safety ratings, avg safety rating and a label with recommendation as "Remove", "leave as-is" or "Improvments needed"
+SELECT street, safetyrating,
+AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating",
+CASE WHEN AVG(safetyrating) OVER (PARTITION BY street) >=4 THEN "Leave AS-IS"
+    WHEN AVG(safetyrating) OVER (PARTITION BY street) <2.5  THEN "Remove"
+    ELSE "Improvements Needed"
+    END AS "Recommendation"
+   FROM BIT_DB.CityBikeLanes 
+    ORDER BY Average_safety_rating desc;
+
+-- list of bike lanes with havae an avg safety rating of 4.0 or higher. Avg safety rating for each bike lane and a label that says"Safe Lane". (use CTE)
+WITH safety_average_CTE AS(
+SELECT street, AVG(safetyrating) as 'rating'
+FROM CityBikeLanes
+GROUP BY street)
+SELECT street,
+rating,
+'Safe Lane' as 'label'
+FROM safety_average_cte
+WHERE rating >=4
+ORDER BY rating desc;
